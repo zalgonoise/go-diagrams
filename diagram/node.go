@@ -9,7 +9,7 @@ import (
 
 	graphviz "github.com/awalterschulze/gographviz"
 	"github.com/zalgonoise/go-diagrams/nodes/assets"
-	"github.com/zalgonoise/go-diagrams/pkg/rand"
+	"github.com/zalgonoise/go-diagrams/pkg/randstr"
 )
 
 type Node struct {
@@ -23,7 +23,7 @@ func NewNode(opts ...NodeOption) *Node {
 	options := DefaultNodeOptions(opts...)
 
 	return &Node{
-		id:      rand.String(8),
+		id:      randstr.String(8),
 		Options: options,
 	}
 }
