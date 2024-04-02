@@ -13,7 +13,7 @@ Go-Diagrams is a loose port of [diagrams](https://github.com/mingrammer/diagrams
 
 Turn this:
 
-```golang
+```go
 d, err := diagram.New(diagram.Filename("app"), diagram.Label("App"), diagram.Direction("LR"))
 if err != nil {
     log.Fatal(err)
@@ -51,12 +51,12 @@ Into this:
 ## Usage
 
 ```sh
-go get github.com/blushft/go-diagrams
+go get github.com/zalgonoise/go-diagrams
 ```
 
 Create a diagram:
 
-```golang
+```go
 d, err := diagram.New(diagram.Label("my-diagram"), diagram.Filename("diagram"))
 if err != nil {
     log.Fatal(err)
@@ -70,7 +70,7 @@ d.Connect(fw, sw)
 
 Render the output:
 
-```golang
+```go
 if err := d.Render(); err != nil {
     log.Fatal(err)
 }
