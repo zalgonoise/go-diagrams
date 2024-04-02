@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/blushft/go-diagrams/diagram"
-	"github.com/blushft/go-diagrams/nodes/apps"
+	"github.com/zalgonoise/go-diagrams/diagram"
+	"github.com/zalgonoise/go-diagrams/nodes/apps"
 )
 
 func main() {

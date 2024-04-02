@@ -1,6 +1,6 @@
 package openstack
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/zalgonoise/go-diagrams/diagram"
 
 type monitoringContainer struct {
 	path string

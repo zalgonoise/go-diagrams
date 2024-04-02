@@ -1,6 +1,6 @@
 package apps
 
-import "github.com/blushft/go-diagrams/diagram"
+import "github.com/zalgonoise/go-diagrams/diagram"
 
 type mlopsContainer struct {
 	path string

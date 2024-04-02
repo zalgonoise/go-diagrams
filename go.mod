@@ -1,6 +1,6 @@
-module github.com/blushft/go-diagrams
+module github.com/zalgonoise/go-diagrams
 
-go 1.14
+go 1.22
 
 require (
 	github.com/awalterschulze/gographviz v2.0.3+incompatible
