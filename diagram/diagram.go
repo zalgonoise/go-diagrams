@@ -40,7 +40,7 @@ func newDiagram(g *graphviz.Escape, options Options) *Diagram {
 	return &Diagram{
 		g:       g,
 		options: options,
-		root:    newGroup("root", 0, nil),
+		root:    newGroup("root", BackgroundBlue, nil),
 	}
 }
 
