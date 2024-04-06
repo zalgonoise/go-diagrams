@@ -6,8 +6,32 @@ import (
 	graphviz "github.com/awalterschulze/gographviz"
 )
 
+type Background int
+
+const (
+	BackgroundBlue Background = iota
+	BackgroundGreen
+	BackgroundPurple
+	BackgroundYellow
+)
+
+func (bg Background) String() string {
+	switch bg {
+	case BackgroundBlue:
+		return "#E5F5FD"
+	case BackgroundGreen:
+		return "#EBF3E7"
+	case BackgroundPurple:
+		return "#ECE8F6"
+	case BackgroundYellow:
+		return "#FDF7E3"
+	default:
+		return BackgroundBlue.String()
+	}
+}
+
 type Group struct {
-	idx      int
+	bg       Background
 	id       string
 	options  GroupOptions
 	parent   *Group
@@ -18,16 +42,16 @@ type Group struct {
 }
 
 func NewGroup(name string, opts ...GroupOption) *Group {
-	return newGroup("cluster_"+name, 0, nil, opts...)
+	return newGroup("cluster_"+name, BackgroundBlue, nil, opts...)
 
 }
 
-func newGroup(name string, idx int, parent *Group, opts ...GroupOption) *Group {
-	options := defaultGroupOptions(idx, opts...)
+func newGroup(name string, bg Background, parent *Group, opts ...GroupOption) *Group {
+	options := defaultGroupOptions(bg, opts...)
 
 	return &Group{
 		id:       name,
-		idx:      idx,
+		bg:       bg,
 		options:  options,
 		parent:   parent,
 		children: make(map[string]*Group),
@@ -89,16 +113,16 @@ func (g *Group) ConnectByID(start, end string, opts ...EdgeOption) *Group {
 }
 
 func (g *Group) ConnectAllTo(end string, opts ...EdgeOption) *Group {
-	for _, n := range g.nodes {
-		g.ConnectByID(n.ID(), end, opts...)
+	for id := range g.nodes {
+		g.ConnectByID(id, end, opts...)
 	}
 
 	return g
 }
 
 func (g *Group) ConnectAllFrom(start string, opts ...EdgeOption) *Group {
-	for _, n := range g.nodes {
-		g.ConnectByID(start, n.ID(), opts...)
+	for id := range g.nodes {
+		g.ConnectByID(start, id, opts...)
 	}
 
 	return g
@@ -127,13 +151,12 @@ func (g *Group) attrs() map[string]string {
 func (g *Group) Group(ng *Group) *Group {
 	g.children[ng.id] = ng
 	ng.parent = g
+
 	return ng
 }
 
 func (g *Group) NewGroup(name string, opts ...GroupOption) *Group {
-	idx := g.idx + 1
-
-	ng := newGroup("cluster"+name, idx, g, opts...)
+	ng := newGroup("cluster"+name, g.bg+1, g, opts...)
 	g.children[ng.id] = ng
 	ng.parent = g
 
@@ -192,7 +215,7 @@ func DefaultGroupOptions(opts ...GroupOption) GroupOptions {
 	return defaultGroupOptions(0, opts...)
 }
 
-func defaultGroupOptions(idx int, opts ...GroupOption) GroupOptions {
+func defaultGroupOptions(bg Background, opts ...GroupOption) GroupOptions {
 	options := GroupOptions{
 		LabelJustify: "l",
 		Direction:    string(LeftToRight),
@@ -207,7 +230,7 @@ func defaultGroupOptions(idx int, opts ...GroupOption) GroupOptions {
 		Attributes: make(map[string]string),
 	}
 
-	IndexedBackground(idx)(&options)
+	WithBackground(bg)(&options)
 
 	for _, o := range opts {
 		o(&options)
@@ -224,13 +247,8 @@ func BackgroundColor(c string) GroupOption {
 	}
 }
 
-func IndexedBackground(idx int) GroupOption {
-	bgcs := []string{"#E5F5FD", "#EBF3E7", "#ECE8F6", "#FDF7E3"}
-	if idx-1 > len(bgcs) {
-		idx = 0
-	}
-
-	return BackgroundColor(bgcs[idx])
+func WithBackground(bg Background) GroupOption {
+	return BackgroundColor(bg.String())
 }
 
 func GroupLabel(l string) GroupOption {
